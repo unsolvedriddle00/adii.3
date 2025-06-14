@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Personal Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        nav {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            animation: slideIn 1s ease-out 0.6s both;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #764ba2, #667eea);
+        }
+
+        .content-section {
+            display: none;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .add-content-form {
+            background: #f8f9ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #e1e5ff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .content-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .content-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .content-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .content-item h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .content-item .meta {
+            color: #777;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: scale(1.05);
+        }
+
+        .service-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .welcome-section {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .welcome-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .welcome-section p {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome to My Hub</h1>
+            <p>Study Materials • Blog • Creative Writing • Services</p>
+        </header>
+
+        <nav>
+            <div class="nav-grid">
+                <button class="nav-btn" onclick="showSection('home')">Home</button>
+                <button class="nav-btn" onclick="showSection('study')">Study Materials</button>
+                <button class="nav-btn" onclick="showSection('blog')">Daily Blog</button>
+                <button class="nav-btn" onclick="showSection('stories')">Stories</button>
+                <button class="nav-btn" onclick="showSection('poetry')">Poetry</button>
+                <button class="nav-btn" onclick="showSection('politics')">Political Views</button>
+                <button class="nav-btn" onclick="showSection('opinions')">Opinions</button>
+                <button class="nav-btn" onclick="showSection('services')">Services</button>
+            </div>
+        </nav>
+
+        <!-- Home Section -->
+        <div id="home" class="content-section active">
+            <div class="welcome-section">
+                <h2>Your Personal Digital Space</h2>
+                <p>Welcome to your comprehensive platform where knowledge meets creativity. Share your study materials, express your thoughts through blogs and poetry, discuss political views, share opinions, and offer your services to the world.</p>
+            </div>
+        </div>
+
+        <!-- Study Materials Section -->
+        <div id="study" class="content-section">
+            <h2 class="section-title">Study Materials</h2>
+            
+            <div class="add-content-form">
+                <h3>Add New Study Material</h3>
+                <div class="form-group">
+                    <label>Subject</label>
+                    <input type="text" id="studySubject" placeholder="e.g., Mathematics, Physics, History">
+                </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="studyTitle" placeholder="Study material title">
+                </div>
+                <div class="form-group">
+                    <label>Content/Notes</label>
+                    <textarea id="studyContent" placeholder="Write your study material content here..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Difficulty Level</label>
+                    <select id="studyLevel">
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="addStudyMaterial()">Add Study Material</button>
+            </div>
+            
+            <div id="studyList" class="content-grid"></div>
+        </div>
+
+        <!-- Blog Section -->
+        <div id="blog" class="content-section">
+            <h2 class="section-title">Daily Blog</h2>
+            
+            <div class="add-content-form">
+                <h3>Write New Blog Post</h3>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="blogTitle" placeholder="Blog post title">
+                </div>
+                <div class="form-group">
+                    <label>Content</label>
+                    <textarea id="blogContent" placeholder="Share your thoughts..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="blogCategory">
+                        <option value="Personal">Personal</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Education">Education</option>
+                        <option value="Lifestyle">Lifestyle</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="addBlogPost()">Publish Post</button>
+            </div>
+            
+            <div id="blogList" class="content-grid"></div>
+        </div>
+
+        <!-- Stories Section -->
+        <div id="stories" class="content-section">
+            <h2 class="section-title">Stories</h2>
+            
+            <div class="add-content-form">
+                <h3>Add New Story</h3>
+                <div class="form-group">
+                    <label>Story Title</label>
+                    <input type="text" id="storyTitle" placeholder="Your story title">
+                </div>
+                <div class="form-group">
+                    <label>Genre</label>
+                    <select id="storyGenre">
+                        <option value="Fiction">Fiction</option>
+                        <option value="Non-Fiction">Non-Fiction</option>
+                        <option value="Mystery">Mystery</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Adventure">Adventure</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Story Content</label>
+                    <textarea id="storyContent" placeholder="Write your story here..."></textarea>
+                </div>
+                <button class="btn" onclick="addStory()">Add Story</button>
+            </div>
+            
+            <div id="storyList" class="content-grid"></div>
+        </div>
+
+        <!-- Poetry Section -->
+        <div id="poetry" class="content-section">
+            <h2 class="section-title">Poetry</h2>
+            
+            <div class="add-content-form">
+                <h3>Add New Poem</h3>
+                <div class="form-group">
+                    <label>Poem Title</label>
+                    <input type="text" id="poetryTitle" placeholder="Your poem title">
+                </div>
+                <div class="form-group">
+                    <label>Style</label>
+                    <select id="poetryStyle">
+                        <option value="Free Verse">Free Verse</option>
+                        <option value="Sonnet">Sonnet</option>
+                        <option value="Haiku">Haiku</option>
+                        <option value="Ballad">Ballad</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Poem Content</label>
+                    <textarea id="poetryContent" placeholder="Write your poem here..."></textarea>
+                </div>
+                <button class="btn" onclick="addPoetry()">Add Poem</button>
+            </div>
+            
+            <div id="poetryList" class="content-grid"></div>
+        </div>
+
+        <!-- Political Views Section -->
+        <div id="politics" class="content-section">
+            <h2 class="section-title">Political Views</h2>
+            
+            <div class="add-content-form">
+                <h3>Share Political Opinion</h3>
+                <div class="form-group">
+                    <label>Topic</label>
+                    <input type="text" id="politicsTitle" placeholder="Political topic or issue">
+                </div>
+                <div class="form-group">
+                    <label>Your View</label>
+                    <textarea id="politicsContent" placeholder="Share your political perspective..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="politicsCategory">
+                        <option value="Domestic Policy">Domestic Policy</option>
+                        <option value="International Relations">International Relations</option>
+                        <option value="Economy">Economy</option>
+                        <option value="Social Issues">Social Issues</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="addPoliticalView()">Share View</button>
+            </div>
+            
+            <div id="politicsList" class="content-grid"></div>
+        </div>
+
+        <!-- Opinions Section -->
+        <div id="opinions" class="content-section">
+            <h2 class="section-title">My Opinions</h2>
+            
+            <div class="add-content-form">
+                <h3>Share Your Opinion</h3>
+                <div class="form-group">
+                    <label>Topic</label>
+                    <input type="text" id="opinionTitle" placeholder="What's your opinion about?">
+                </div>
+                <div class="form-group">
+                    <label>Your Opinion</label>
+                    <textarea id="opinionContent" placeholder="Share your thoughts and opinions..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="opinionCategory">
+                        <option value="Technology">Technology</option>
+                        <option value="Society">Society</option>
+                        <option value="Culture">Culture</option>
+                        <option value="Education">Education</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="addOpinion()">Share Opinion</button>
+            </div>
+            
+            <div id="opinionList" class="content-grid"></div>
+        </div>
+
+        <!-- Services Section -->
+        <div id="services" class="content-section">
+            <h2 class="section-title">My Services</h2>
+            
+            <div class="add-content-form">
+                <h3>Add New Service</h3>
+                <div class="form-group">
+                    <label>Service Name</label>
+                    <input type="text" id="serviceName" placeholder="Name of your service">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="serviceDescription" placeholder="Describe your service..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Price Range</label>
+                    <input type="text" id="servicePrice" placeholder="e.g., $50-100, Contact for quote">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="serviceCategory">
+                        <option value="Writing">Writing</option>
+                        <option value="Tutoring">Tutoring</option>
+                        <option value="Consulting">Consulting</option>
+                        <option value="Design">Design</option>
+                        <option value="Programming">Programming</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="addService()">Add Service</button>
+            </div>
+            
+            <div id="serviceList" class="content-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let data = {
+            study: [],
+            blog: [],
+            stories: [],
+            poetry: [],
+            politics: [],
+            opinions: [],
+            services: []
+        };
+
+        // Navigation
+        function showSection(sectionName) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionName).classList.add('active');
+        }
+
+        // Generic function to add content
+        function addContent(type, contentObj) {
+            data[type].push({
+                ...contentObj,
+                id: Date.now(),
+                date: new Date().toLocaleDateString()
+            });
+            displayContent(type);
+        }
+
+        // Display content
+        function displayContent(type) {
+            const container = document.getElementById(type + 'List');
+            const items = data[type];
+            
+            container.innerHTML = items.map(item => {
+                if (type === 'services') {
+                    return `
+                        <div class="service-card">
+                            <h3>${item.name}</h3>
+                            <p><strong>Category:</strong> ${item.category}</p>
+                            <p>${item.description}</p>
+                            <p><strong>Price:</strong> ${item.price}</p>
+                            <p><small>Added: ${item.date}</small></p>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="content-item">
+                            <h3>${item.title}</h3>
+                            <div class="meta">
+                                ${item.category || item.subject || item.genre || item.style || ''} • ${item.date}
+                                ${item.level ? ` • ${item.level}` : ''}
+                            </div>
+                            <p>${item.content.length > 200 ? item.content.substring(0, 200) + '...' : item.content}</p>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        // Specific add functions
+        function addStudyMaterial() {
+            const subject = document.getElementById('studySubject').value;
+            const title = document.getElementById('studyTitle').value;
+            const content = document.getElementById('studyContent').value;
+            const level = document.getElementById('studyLevel').value;
+            
+            if (!subject || !title || !content) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            addContent('study', { subject, title, content, level });
+            
+            // Clear form
+            document.getElementById('studySubject').value = '';
+            document.getElementById('studyTitle').value = '';
+            document.getElementById('studyContent').value = '';
+        }
+
+        function addBlogPost() {
+            const title = document.getElementById('blogTitle').value;
+            const content = document.getElementById('blogContent').value;
+            const category = document.getElementById('blogCategory').value;
+            
+            if (!title || !content) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            addContent('blog', { title, content, category });
+            
+            // Clear form
+            document.getElementById('blogTitle').value = '';
+            document.getElementById('blogContent').value = '';
+        }
+
+        function addStory() {
+            const title = document.getElementById('storyTitle').value;
+            const genre = document.getElementById('storyGenre').value;
+            const content = document.getElementById('storyContent').value;
+            
+            if (!title || !content) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            addContent('stories', { title, genre, content });
+            
+            // Clear form
+            document.getElementById('storyTitle').value = '';
+            document.getElementById('storyContent').value = '';
+        }
+
+        function addPoetry() {
+            const title = document.getElementById('poetryTitle').value;
+            const style = document.getElementById('poetryStyle').value;
+            const content = document.getElementById('poetryContent').value;
+            
+            if (!title || !content) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            addContent('poetry', { title, style, content });
+            
+            // Clear form
+            document.getElementById('poetryTitle').value = '';
+            document.getElementById('poetryContent').value = '';
+        }
+
+        function addPoliticalView() {
+            const title = document.getElementById('politicsTitle').value;
+            const content = document.getElementById('politicsContent').value;
+            const category = document.getElementById('politicsCategory').value;
+            
+            if (!title || !content) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            addContent('politics', { title, content, category });
+            
+            // Clear form
+            document.getElementById('politicsTitle').value = '';
+            document.getElementById('politicsContent').value = '';
+        }
+
+        function addOpinion() {
+            const title = document.getElementById('opinionTitle').value;
+            const content = document.getElementById('opinionContent').value;
+            const category = document.getElementById('opinionCategory').value;
+            
+            if (!title || !content) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            addContent('opinions', { title, content, category });
+            
+            // Clear form
+            document.getElementById('opinionTitle').value = '';
+            document.getElementById('opinionContent').value = '';
+        }
+
+        function addService() {
+            const name = document.getElementById('serviceName').value;
+            const description = document.getElementById('serviceDescription').value;
+            const price = document.getElementById('servicePrice').value;
+            const category = document.getElementById('serviceCategory').value;
+            
+            if (!name || !description || !price) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            addContent('services', { name, description, price, category });
+            
+            // Clear form
+            document.getElementById('serviceName').value = '';
+            document.getElementById('serviceDescription').value = '';
+            document.getElementById('servicePrice').value = '';
+        }
+    </script>
+</body>
+          </html>
